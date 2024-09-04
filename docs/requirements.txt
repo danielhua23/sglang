@@ -7,6 +7,6 @@ sphinx-tabs
 sphinxcontrib-mermaid
 pillow
 pydantic
-torch
+# torch
 transformers
 urllib3<2.0.0
