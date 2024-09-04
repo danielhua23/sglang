@@ -45,6 +45,8 @@ from triton.runtime.cache import (
 
 logger = logging.getLogger(__name__)
 
+def is_hip():
+    return torch.version.hip is not None
 
 show_time_cost = False
 time_infos = {}

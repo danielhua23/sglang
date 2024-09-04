@@ -33,7 +33,12 @@ class SiluAndMul(CustomOp):
     def forward_native(self, x: torch.Tensor) -> torch.Tensor:
         d = x.shape[-1] // 2
         return F.silu(x[..., :d]) * x[..., d:]
-
+    
+    # override forwar_hip due to flashinfer incompatability
+    def forward_hip(self, x: torch.Tensor) -> torch.Tensor:
+        print("silu and mul in hip\n")
+        return self.forward_native(x)
+    
     def forward_cuda(self, x: torch.Tensor) -> torch.Tensor:
         d = x.shape[-1] // 2
         output_shape = x.shape[:-1] + (d,)

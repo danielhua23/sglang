@@ -49,6 +49,15 @@ class RMSNorm(CustomOp):
             return x, residual
         out = rmsnorm(x, self.weight.data, self.variance_epsilon)
         return out
+    
+    # override forwar_hip due to flashinfer incompatability
+    def forward_hip(
+        self,
+        x: torch.Tensor,
+        residual: Optional[torch.Tensor] = None,
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+        print("fwd rmsnorm in hip\n")
+        return self.forward_native(x, residual)
 
     def forward_native(
         self,

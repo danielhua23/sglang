@@ -77,7 +77,8 @@ class Sampler(CustomOp):
             logits = logits.next_token_logits
 
         probs = self._get_probs(logits, sampling_info)
-
+        print("sample in hip\n")
+        print("prob.device = {}".format(probs.device))
         if not global_server_args_dict["disable_flashinfer_sampling"]:
             max_top_k_round, batch_size = 32, probs.shape[0]
             uniform_samples = torch.rand(

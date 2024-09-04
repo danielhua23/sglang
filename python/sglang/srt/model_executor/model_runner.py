@@ -63,6 +63,7 @@ from sglang.srt.utils import (
     monkey_patch_vllm_dummy_weight_loader,
     monkey_patch_vllm_p2p_access_check,
     monkey_patch_vllm_qvk_linear_loader,
+    is_hip,
 )
 
 logger = logging.getLogger(__name__)
@@ -114,6 +115,9 @@ class ModelRunner:
             server_args.max_total_tokens,
         )
         self.init_cublas()
+        # amd: we dont support flashinfer and cudagraph
+        # so we must switch on disable_flashinfer arg to disable flashinfer and cudagraph.
+        # --disable-flashinfer True
         self.init_flashinfer()
         self.init_cuda_graphs()
 
@@ -586,7 +590,7 @@ class ModelRunner:
         else:
             raise ValueError(f"Invaid forward mode: {forward_mode}")
 
-
+# fixme: imported vllm rocm supported models list
 @lru_cache()
 def import_model_classes():
     model_arch_name_to_cls = {}
